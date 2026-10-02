@@ -12,8 +12,8 @@ const successMessage = document.getElementById("successMessage");
 
 
 //user
-function validateUsername() {
-  const value = usernameInput.value.required();
+function checkUsername() {
+  const value = usernameInput.value.trim();
   if (value === "") {
     usernameError.textContent = "Username is required.";
     return false;
@@ -40,6 +40,54 @@ function checkEmail() {
 function checkPassword() {
   const text = password.value;
 
+  if (text === "") {
+    passwordError.textContent = "Password is required.";
+    return false;
+  }
+  passwordError.textContent = "";
+  return true;
+}
 
-  
+//check password
+function checkConfirmPassword() {
+  if (confirmPassword.value === "") {
+    confirmPasswordError.textContent = "Please confirm your password.";
+    return false;
+  }
+  if (confirmPassword.value !== password.value) {
+    confirmPasswordError.textContent = "Passwords do not match.";
+    return false;
+  }
+  confirmPasswordError.textContent = "";
+  return true;
+}
+
+//showing errors while typing 
+username.addEventListener("input", checkUsername);
+email.addEventListener("input", checkEmail);
+password.addEventListener("input", checkPassword);
+confirmPassword.addEventListener("input", checkConfirmPassword);
+
+//clicking register
+form.addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  const usernameOk = checkUsername();
+  const emailOk = checkEmail();
+  const passwordOk = checkPassword();
+  const confirmOk = checkConfirmPassword();
+
+  if (usernameOk && emailOk && passwordOk && confirmOk) {
+    localStorage.setItem("username", username.value.trim());
+    successMessage.textContent = "Registration successful!";
+  } else {
+    successMessage.textContent = "";
+  }
+
+});
+
 //local storage 
+// const savedName = localStorage.getItem("username");
+// if (savedName) {
+//   username.value = savedName;
+// }
